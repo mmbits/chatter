@@ -1,24 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
+import logo from './swirly.png';
+//from  http://pluspng.com/png-logo-design-2476.html
+//  "Use these free PNG Logo Design for your personal projects or designs."
 import './App.css';
+import TextInput from './TextInput'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="headerer">
+        <img src={logo} alt="stolen logo" class="logo" />
+        Chatter
+        </header>
+        <TextInput/>
     </div>
   );
 }

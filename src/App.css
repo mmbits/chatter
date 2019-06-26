@@ -1,33 +1,56 @@
+*{
+  box-sizing: border-box;
+}
+
 .App {
+  background: #7F7FD5;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  height: 100vh;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.headerer{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  font-size:40px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  background: rgba(255, 255, 255, 0.2);
+  color:white;
+  padding: 20px 40px;
+  text-align: left;
+  border-bottom: 2px solid white;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+  height: 40px;
+  margin-right:n 30px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.text-input{
+  position:absolute;
+  bottom:0;
+  height:40px;
+  width:100%;
+  border-top:1px solid white;
+}
+
+.text-input input{
+  width: calc(100% - 50px);
+  height:80%;
+  font-size:24px;
+}
+
+.text-input button {
+  width: 40px;
+  height: 100%;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.text-input button:hover {
+  background:teal;
+  color:white;
 }
