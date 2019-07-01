@@ -12,7 +12,7 @@ function App() {
         <img src={logo} alt="stolen logo" class="logo" />
         Chatter
         </header>
-        <TextInput/>
+        <TextInput sendMessage={e=> alert(e)} />
     </div>
   );
 }

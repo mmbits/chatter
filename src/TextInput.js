@@ -1,12 +1,27 @@
 import React from 'react'
+import { FiSend } from "react-icons/fi";
 
 class TextInput extends React.Component {
-    render(){
-        return(<div className="text-input">
-            <input />
-            <button />
-        </div>)
-    }
+
+  state={
+    text:""
+  }
+
+  send = () => {
+    this.props.sendMessage(this.state.text)
+    this.setState({text:""})
+  }
+
+  render(){
+    return(<div className="text-input">
+      <input value={this.state.text}
+        placeholder="Write your message here..."
+        onChange={e=> this.setState({text: e.target.value})}/>
+      <button disabled={!this.state.text} onClick={this.send}>
+        <FiSend style={{height:15,width:15}} />
+      </button>
+  </div>)
+  }
 }
 
 export default TextInput
