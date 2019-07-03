@@ -16,13 +16,20 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.messages)
+    var {messages} = this.state
     return (
       <div className="App">
         <header className="headerer">
           <img src={logo} alt="stolen logo" className="logo" />
           Chatter
         </header>
+        <main className="messages">
+          {messages.map((m,i)=>{
+            return (<div key={i}>
+              {m}
+              </div>)
+          })}
+        </main>
         <TextInput sendMessage={this.sendMessage} />
       </div>
     );
