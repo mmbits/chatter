@@ -5,16 +5,28 @@ import logo from './swirly.png';
 import './App.css';
 import TextInput from './TextInput'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="headerer">
-        <img src={logo} alt="stolen logo" class="logo" />
-        Chatter
+class App extends React.Component {
+  state={
+    messages:[]
+  }
+
+  sendMessage = (m) => {
+    var messages = [...this.state.messages, m]
+    this.setState({messages})
+  }
+
+  render() {
+    console.log(this.state.messages)
+    return (
+      <div className="App">
+        <header className="headerer">
+          <img src={logo} alt="stolen logo" className="logo" />
+          Chatter
         </header>
-        <TextInput sendMessage={e=> alert(e)} />
-    </div>
-  );
+        <TextInput sendMessage={this.sendMessage} />
+      </div>
+    );
+  }
 }
 
 export default App;
