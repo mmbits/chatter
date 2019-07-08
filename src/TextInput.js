@@ -19,6 +19,7 @@ class TextInput extends React.Component {
   }
 
   render(){
+    var {messages} = this.state
     return(<div className="text-input">
       <input value={this.state.text}
         onKeyPress={this.keyPress}
