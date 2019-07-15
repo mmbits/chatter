@@ -1,13 +1,13 @@
 import React from 'react'
-import { FiSend } from "react-icons/fi";
-//test
+import { FiSend } from "react-icons/fi"; 
+
 class TextInput extends React.Component {
 
   state={
-    text:""
+    text:"",
   }
 
-  send = () => {
+  send = (e) => {
     this.props.sendMessage(this.state.text)
     this.setState({text:""})
   }
@@ -19,16 +19,21 @@ class TextInput extends React.Component {
   }
 
   render(){
+    var {text} = this.state
     return(<div className="text-input">
-      <input value={this.state.text}
-        onKeyPress={this.keyPress}
+      <input value={text}
         placeholder="Write your message here..."
-        onChange={e=> this.setState({text: e.target.value})}/>
-      <button disabled={!this.state.text} onClick={this.send}>
+        onChange={e=> this.setState({text: e.target.value})}
+        onKeyPress={this.keyPress}
+      />
+      <button disabled={!text} onClick={this.send}>
         <FiSend style={{height:15,width:15}} />
       </button>
-  </div>)
+    </div>)
   }
+
 }
 
 export default TextInput
+
+

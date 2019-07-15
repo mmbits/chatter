@@ -1,8 +1,6 @@
-import React from 'react';
-import logo from './swirly.png';
-//from  http://pluspng.com/png-logo-design-2476.html
-//  "Use these free PNG Logo Design for your personal projects or designs."
-import './App.css';
+import React from 'react'
+import './App.css'
+import coolpic from './logo.png'
 import TextInput from './TextInput'
 import NamePicker from './NamePicker'
 import * as firebase from "firebase/app";
@@ -10,7 +8,8 @@ import "firebase/firestore";
 import "firebase/storage"
 
 class App extends React.Component {
-  state={
+
+  state = {
     messages:[],
     name:'',
     editName:false,
@@ -43,6 +42,7 @@ class App extends React.Component {
     /* <=========================> */
   }
 
+  /* <===========================> */
   receive = (m) => {
     const messages = [m, ...this.state.messages]
     messages.sort((a,b)=>b.ts-a.ts)
@@ -56,14 +56,15 @@ class App extends React.Component {
       ts: Date.now()
     })
   }
+  /* <===========================> */
 
-  sendMessage = (text) => {
-    var m = {
+  gotMessage = (text) => {
+    var message = {
       text,
-      name: this.state.name,
+      from: this.state.name
     }
-    var messages = [...this.state.messages, m]
-    this.setState({messages})
+    var newMessagesArray = [message, ...this.state.messages]
+    this.setState({messages: newMessagesArray})
   }
 
   setEditName = (editName) => {
@@ -74,45 +75,37 @@ class App extends React.Component {
   }
 
   render() {
-    var {messages, name, editName} = this.state
+    var {editName, messages, name} = this.state
     return (
       <div className="App">
-        <header className="headerer">
-          <img
-            src={logo}
-            alt="stolen logo"
-            className="logo"
-          />
-          Chatter
+        <header className="header">
+          <div>
+            <img src={coolpic} className="logo" alt="logo" />
+            Chatter
+          </div>
           <NamePicker
-            name = {name}
+            name={name}
             editName={editName}
-            // changeName={function(value){ this.setState({name: value}).bind(this)} }
-            changeName={value=> this.setState({name: value})}
+            changeName={name=> this.setState({name})}
             setEditName={this.setEditName}
           />
         </header>
         <main className="messages">
           {messages.map((m,i)=>{
-            return <Message key={i} m={m} name={name} />
+            return (<div key={i} className="bubble-wrap"
+                from={m.from===name ? "me" : "you"}
+              >
+              {m.from!==name && <div className="bubble-name">{m.from}</div>}
+              <div className="bubble">
+                <span>{m.text}</span>
+              </div>
+            </div>)
           })}
         </main>
-        <TextInput sendMessage={this.sendMessage} />
+        <TextInput sendMessage={text=> this.send({text})} />
       </div>
-    );
+    )
   }
 }
 
 export default App;
-
-function Message(props) {
-  var {m, name} = props
-  return (<div className="bubble-wrap"
-    from={m.from===name ? "me" : "you"}
-  >
-    {m.from!==name && <div className="bubble-name">{m.from}</div>}
-    <div className="bubble">
-      <span>{m.text}</span>
-    </div>
-  </div>)
-}
