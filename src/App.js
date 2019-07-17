@@ -7,7 +7,8 @@ import TextInput from './TextInput'
 import NamePicker from './NamePicker'
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import "firebase/storage"
+import "firebase/storage";
+import Div100vh from 'react-div-100vh';
 
 class App extends React.Component {
   state={
@@ -23,12 +24,17 @@ class App extends React.Component {
     }
 
     /* <=========================> */
-    firebase.initializeApp({
-      apiKey: "AIzaSyBAJVwrP5J4AhVKd5ijYtcTF9XMV6tIcY4",
-      authDomain: "msgr-2.firebaseapp.com",
-      projectId: "msgr-2",
-      storageBucket: "msgr-2.appspot.com",
-    });
+    const firebaseConfig = {
+      apiKey: "AIzaSyCCWUJeRd9BqWL3Pot1HsAgp3IuXlItIp4",
+      authDomain: "chatter-6d350.firebaseapp.com",
+      databaseURL: "https://chatter-6d350.firebaseio.com",
+      projectId: "chatter-6d350",
+      storageBucket: "chatter-6d350.appspot.com",
+      messagingSenderId: "988024720396",
+      appId: "1:988024720396:web:0053baae399cb929"
+    };
+
+    firebase.initializeApp(firebaseConfig);
 
     this.db = firebase.firestore();
 
@@ -66,6 +72,15 @@ class App extends React.Component {
     this.setState({messages})
   }
 
+  takePicture = async (img) => {
+    this.setState({showCamera:false})
+    const imgID = Math.random().toString(36).substring(7);
+    var storageRef = firebase.storage().ref();
+    var ref = storageRef.child(imgID+'.jpg');
+    await ref.putString(img, 'data_url')
+    this.send({img: imgID})
+  }
+
   setEditName = (editName) => {
     if(!editName){
       localStorage.setItem('name', this.state.name)
@@ -76,7 +91,7 @@ class App extends React.Component {
   render() {
     var {messages, name, editName} = this.state
     return (
-      <div className="App">
+      <Div100vh className="App">
         <header className="headerer">
           <img
             src={logo}
@@ -98,12 +113,15 @@ class App extends React.Component {
           })}
         </main>
         <TextInput sendMessage={this.sendMessage} />
-      </div>
+      </Div100vh>
     );
   }
 }
 
 export default App;
+
+const bucket = 'https://firebasestorage.googleapis.com/v0/b/chatter-6d350.appspot.com/o/'
+const suffix = '.jpg?alt=media'
 
 function Message(props) {
   var {m, name} = props
@@ -113,6 +131,7 @@ function Message(props) {
     {m.from!==name && <div className="bubble-name">{m.from}</div>}
     <div className="bubble">
       <span>{m.text}</span>
+      {m.img && <img alt="pic" src={bucket+m.img+suffix} />}
     </div>
   </div>)
 }

@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-/chatter-1-master
+/chatter01
+/chatter02
+/chatter03
+/chatter04
 # dependencies
 /node_modules
 /.pnp

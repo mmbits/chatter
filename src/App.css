@@ -29,7 +29,7 @@
 }
 
 .text-input{
-  position:absolute;
+  position:fixed;
   bottom:0;
   height:40px;
   width:100%;
@@ -55,9 +55,11 @@
 }
 
 .messages{
-  height:calc(100%-128px);
+  display: flex;
   overflow: auto;
+  height:calc(100% - 125px);
   padding-top: 10px;
+  flex-direction: column-reverse;
 }
 
 .bubble-wrap{
@@ -65,7 +67,9 @@
   padding:8px 20px;
   display:flex;
   position: relative;
+  flex-shrink:0;
 }
+
 .bubble-wrap[from="me"] {
   flex-direction:row-reverse;
 }
@@ -92,6 +96,7 @@
   left:auto;
   right:-6px;
 }
+
 .bubble:after{
   content:"";
   background:black;
@@ -104,6 +109,12 @@
   position:relative;
   z-index:101;
 }
+
+.bubble img {
+  position: relative;
+  z-index: 101;
+}
+
 .bubble-name{
   position: absolute;
   color: black;
