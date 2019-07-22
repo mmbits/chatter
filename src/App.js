@@ -11,16 +11,16 @@ import "firebase/storage";
 import Div100vh from 'react-div-100vh';
 
 class App extends React.Component {
-  state={
-    messages:[],
-    name:'',
-    editName:false,
+  state = {
+    messages: [],
+    name: '',
+    editName: false,
   }
 
-  componentWillMount(){
+  componentWillMount() {
     var name = localStorage.getItem('name')
-    if(name){
-      this.setState({name})
+    if (name) {
+      this.setState({ name })
     }
 
     /* <=========================> */
@@ -42,17 +42,29 @@ class App extends React.Component {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           //console.log(change.doc.data())
-          this.receive(change.doc.data())
+          this.receive({
+            ...change.doc.data(),
+            id: change.doc.id
+          })
+        }
+        if (change.type === 'removed') {
+          this.remove(change.doc.id)
         }
       })
     })
     /* <=========================> */
   }
 
+  remove = (id) => {
+    var msgs = [...this.state.messages]
+    var messages = msgs.filter(m => m.id !== id)
+    this.setState({ messages })
+  }
+
   receive = (m) => {
     const messages = [m, ...this.state.messages]
-    messages.sort((a,b)=>b.ts-a.ts)
-    this.setState({messages})
+    messages.sort((a, b) => b.ts - a.ts)
+    this.setState({ messages })
   }
 
   send = (m) => {
@@ -63,33 +75,24 @@ class App extends React.Component {
     })
   }
 
-  sendMessage = (text) => {
-    var m = {
-      text,
-      name: this.state.name,
-    }
-    var messages = [...this.state.messages, m]
-    this.setState({messages})
-  }
-
   takePicture = async (img) => {
-    this.setState({showCamera:false})
+    this.setState({ showCamera: false })
     const imgID = Math.random().toString(36).substring(7);
     var storageRef = firebase.storage().ref();
-    var ref = storageRef.child(imgID+'.jpg');
+    var ref = storageRef.child(imgID + '.jpg');
     await ref.putString(img, 'data_url')
-    this.send({img: imgID})
+    this.send({ img: imgID })
   }
 
   setEditName = (editName) => {
-    if(!editName){
+    if (!editName) {
       localStorage.setItem('name', this.state.name)
     }
-    this.setState({editName})
+    this.setState({ editName })
   }
 
   render() {
-    var {messages, name, editName} = this.state
+    var { messages, name, editName } = this.state
     return (
       <Div100vh className="App">
         <header className="headerer">
@@ -100,19 +103,26 @@ class App extends React.Component {
           />
           Chatter
           <NamePicker
-            name = {name}
+            name={name}
             editName={editName}
             // changeName={function(value){ this.setState({name: value}).bind(this)} }
-            changeName={value=> this.setState({name: value})}
+            changeName={value => this.setState({ name: value })}
             setEditName={this.setEditName}
           />
         </header>
         <main className="messages">
-          {messages.map((m,i)=>{
-            return <Message key={i} m={m} name={name} />
+          {messages.map((m, i) => {
+            return (<Message key={i} m={m} name={name}
+              onClick={() => {
+                if (name === m.from || name === "Marci") {
+                  this.db.collection('messages').doc(m.id).delete()
+                }
+              }}
+                
+            />)
           })}
         </main>
-        <TextInput sendMessage={this.sendMessage} />
+        <TextInput sendMessage={t => this.send({ text: t })} />
       </Div100vh>
     );
   }
@@ -124,14 +134,15 @@ const bucket = 'https://firebasestorage.googleapis.com/v0/b/chatter-6d350.appspo
 const suffix = '.jpg?alt=media'
 
 function Message(props) {
-  var {m, name} = props
+  var { m, name, onClick } = props
   return (<div className="bubble-wrap"
-    from={m.from===name ? "me" : "you"}
+    from={m.from === name ? "me" : "you"}
+    onClick={onClick}
   >
-    {m.from!==name && <div className="bubble-name">{m.from}</div>}
+    {m.from !== name && <div className="bubble-name">{m.from}</div>}
     <div className="bubble">
       <span>{m.text}</span>
-      {m.img && <img alt="pic" src={bucket+m.img+suffix} />}
+      {m.img && <img alt="pic" src={bucket + m.img + suffix} />}
     </div>
   </div>)
 }
